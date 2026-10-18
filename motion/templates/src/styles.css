@@ -1,0 +1,103 @@
+/* ============================================================================
+   styles.css — 1080 x 1920 (9:16)
+   Bright paper, candy palette. The stage carries a real CSS `perspective`, so
+   everything inside #world is projected by the browser: distant layers shrink,
+   rotated planes foreshorten, and a dolly produces true parallax.
+   ========================================================================== */
+
+@font-face{font-family:'Cairo';src:url('../assets/fonts/cairo-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Cairo';src:url('../assets/fonts/cairo-700.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'Cairo';src:url('../assets/fonts/cairo-900.woff2') format('woff2');font-weight:900;font-display:block}
+@font-face{font-family:'Tajawal';src:url('../assets/fonts/tajawal-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Tajawal';src:url('../assets/fonts/tajawal-700.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'Tajawal';src:url('../assets/fonts/tajawal-900.woff2') format('woff2');font-weight:900;font-display:block}
+@font-face{font-family:'Amiri';src:url('../assets/fonts/amiri-700.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'PlexAr';src:url('../assets/fonts/ibm-plex-sans-arabic-700.woff2') format('woff2');font-weight:700;font-display:block}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#FFF4E4;overflow:hidden;width:1080px;height:1920px}
+
+#stage{
+  position:relative;width:1080px;height:1920px;overflow:hidden;
+  perspective:1500px;perspective-origin:50% 46%;
+  background:#FFF4E4;font-family:'Cairo',sans-serif;
+}
+#world{
+  position:absolute;inset:0;transform-style:preserve-3d;
+  will-change:transform;
+}
+.plane{
+  position:absolute;inset:0;transform-style:preserve-3d;
+  pointer-events:none;will-change:transform,filter;
+}
+
+/* ------------------------------------------------------- the figure rig */
+.girlpart{
+  position:absolute;transform-style:preserve-3d;
+  background-repeat:no-repeat;background-size:100% 100%;
+  will-change:transform,opacity,filter;
+}
+/* a paper cut-out has thickness: a tight dark contact shadow on one side */
+#girlBody,#girlHead{filter:drop-shadow(6px 14px 12px rgba(58,36,80,.30))}
+#girlShadow{filter:blur(2px);opacity:.32}
+
+#art{position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none}
+
+/* ------------------------------------------------------------ typography */
+#type{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+#stack{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:0 70px;text-align:center;white-space:nowrap;
+  will-change:transform,opacity;
+}
+.line{
+  font-family:'Cairo',sans-serif;font-weight:900;color:#3A2450;
+  line-height:1.34;white-space:nowrap;
+}
+.line .w{display:inline-block}
+/* paper-stack extrusion: the type is built from stacked sheets, so it reads
+   as a physical object sitting in the scene rather than flat type on top */
+.line .w.kw{
+  color:#F0407A;
+  text-shadow:
+     2px 3px 0 #FF9BB8,  4px 6px 0 #FF6F9C,
+     6px 9px 0 #E0326C,  8px 12px 0 #B8235A,
+     10px 16px 14px rgba(58,36,80,.28);
+}
+.line .w.alt{color:#12A09B;
+  text-shadow: 2px 3px 0 #37C9C4, 4px 6px 0 #12A09B, 6px 9px 0 #0C807C, 8px 13px 14px rgba(58,36,80,.26);
+}
+.line .w.sun{color:#FF8F3C;
+  text-shadow: 2px 3px 0 #FFC53D, 4px 6px 0 #FF8F3C, 6px 9px 0 #E06A1E, 8px 13px 14px rgba(58,36,80,.26);
+}
+/* the name gets the loudest treatment in the film */
+.line.name{
+  font-size:132px;letter-spacing:-.01em;
+}
+.line.name .w{
+  color:#FFF4E4;
+  text-shadow:
+     0 0 0 #B8235A,
+     3px 4px 0 #F0407A, 6px 8px 0 #D62B67,
+     9px 12px 0 #A81C50, 12px 17px 0 #7C1138,
+     15px 22px 18px rgba(58,36,80,.34);
+}
+.line.small{font-size:62px}
+.line.mid{font-size:86px}
+.line.big{font-size:110px}
+
+.sub{
+  font-family:'Tajawal',sans-serif;font-weight:700;font-size:38px;
+  color:#6B4A85;margin-top:12px;
+}
+
+/* ------------------------------------------------------------- overlays */
+#papertex,#fibres,#grain,#vignette,#flash{position:absolute;inset:0;pointer-events:none}
+#papertex{mix-blend-mode:multiply;opacity:.34;background-size:cover}
+#fibres{mix-blend-mode:overlay;opacity:.14;background-size:cover}
+#grain{mix-blend-mode:multiply;opacity:.10;background-size:300px}
+#vignette{background:radial-gradient(80% 60% at 50% 44%,transparent 46%,rgba(58,36,80,.22) 82%,rgba(58,36,80,.44) 100%)}
+#flash{background:#fff;opacity:0;mix-blend-mode:screen}

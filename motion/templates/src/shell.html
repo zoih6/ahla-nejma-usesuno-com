@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>أحلى نجمة — إيلاف</title>
+<style>/*__STYLE__*/</style>
+</head>
+<body>
+<div id="stage">
+  <div id="world">
+
+    <!-- depth planes, back to front. Each carries its own z so the camera
+         dolly produces genuine parallax and the focal plane can be placed. -->
+    <div class="plane" id="p_sky"></div>
+    <div class="plane" id="p_far"></div>
+    <div class="plane" id="p_mid"></div>
+
+    <!-- the figure is a RIG, not an image: head and body are separate nodes
+         so they can rotate independently about their own pivots. -->
+    <div class="plane" id="p_girl">
+      <div id="girlShadow" class="girlpart"></div>
+      <div id="girlBody"   class="girlpart"></div>
+      <div id="girlHead"   class="girlpart"></div>
+    </div>
+
+    <div class="plane" id="p_near"></div>
+    <div class="plane" id="p_fore"></div>
+
+    <!-- SVG overlay lives in front of everything; it is where the drawn
+         world (stars, confetti, props, light) is composed -->
+    <svg id="art" viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMid slice"></svg>
+  </div>
+
+  <div id="type"><div id="stack"></div></div>
+
+  <div id="papertex"></div>
+  <div id="fibres"></div>
+  <div id="grain"></div>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+</div>
+
+<script>/*__DATA__*/null</script>
+<script>/*__CORE__*/</script>
+<script>/*__ART__*/</script>
+<script>/*__ENGINE__*/</script>
+</body>
+</html>

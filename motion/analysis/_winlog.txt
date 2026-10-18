@@ -1,0 +1,7 @@
+window 0-14 -> 952 bytes
+window 10-24 -> 1916 bytes
+window 20-34 -> 1663 bytes
+window 30-44 -> 1647 bytes
+window 40-54 -> 1273 bytes
+window 46-57 -> 564 bytes
+ALLDONE
