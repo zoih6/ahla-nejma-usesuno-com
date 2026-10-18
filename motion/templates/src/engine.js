@@ -158,43 +158,44 @@ function placeGirl(scene, t, p, energy, beat) {
   const pop = E.back(inU);
   const vis = clamp(inU * outU, 0, 1);
 
-  /* motion: sway from the music, drift from noise, bob on the beat */
-  const sway = Math.sin(t * 1.35) * 3.6 + noise1(t * .55, 3) * 2.8;
-  const swayLag = Math.sin(t * 1.35 - .55) * 4.4 + noise1(t * .55 - .3, 7) * 3.2;
-  /* a nod on the beat: the head dips just after each beat lands */
-  const nod = Math.pow(1 - beat, 2.2) * 4.2;
-  const bob = Math.sin(t * 2.7) * 3.6 * (.5 + energy * .8) + nod;
-  const lean = Math.sin(t * .8) * 2.6;
+  /* THE FIGURE MOVES AS ONE PIECE.
+     It used to be split into a head node and a body node so the head could
+     counter-rotate — but that split reads as the head being CUT OFF, which is
+     exactly what was objected to. The cut-out is now a single sheet of paper:
+     it swings about its feet, breathes on the beat and turns in 3D, but it is
+     never divided. */
+  const fw = full[2] * scale, fh = full[3] * scale;
+  const fx = ox + full[0] * scale, fy = oy + full[1] * scale;
 
-  /* ---- body: sways about the hips ---- */
-  const B = R.parts.body;
-  if (B) {
-    const bw = B.bbox[2] * scale, bh = B.bbox[3] * scale;
-    const bx = ox + B.bbox[0] * scale, by = oy + B.bbox[1] * scale;
-    setPart(EL.body, `girl${idxOf(g.which)}_body.png`, bx, by, bw, bh,
-      B.pivot[0] * scale, B.pivot[1] * scale,
-      `rotateZ(${n2(sway)}deg) rotateY(${n2(lean)}deg) scale(${n2(.80 + .20 * pop)})`,
-      vis);
-  }
-  /* ---- head: counter-rotates, delayed, and bobs ---- */
-  const Hd = R.parts.head;
-  if (Hd) {
-    const hw = Hd.bbox[2] * scale, hh = Hd.bbox[3] * scale;
-    const hx = ox + Hd.bbox[0] * scale, hy = oy + Hd.bbox[1] * scale;
-    setPart(EL.head, `girl${idxOf(g.which)}_head.png`, hx, hy, hw, hh,
-      Hd.pivot[0] * scale, Hd.pivot[1] * scale,
-      `rotateZ(${n2(-swayLag * .72)}deg) rotateY(${n2(-lean * .7)}deg) ` +
-      `translateY(${n2(bob)}px) scale(${n2(.80 + .20 * pop)})`,
-      vis);
-  }
-  /* ---- contact shadow: stays on the ground, only scales ---- */
-  if (R.shadowBBox) {
-    const s = R.shadowBBox;
-    setPart(EL.shadow, `girl${idxOf(g.which)}_shadow.png`,
-      ox + s[0] * scale, oy + s[1] * scale, s[2] * scale, s[3] * scale,
-      s[2] * scale / 2, s[3] * scale,
-      `scale(${n2((.80 + .20 * pop) * (1 - bob / 260))})`, vis * .85);
-  }
+  /* sway about the feet, drift from noise, bob on the beat, turn in 3D */
+  const sway = Math.sin(t * 1.15) * 2.2 + noise1(t * .48, 3) * 1.7;
+  const nod = Math.pow(1 - beat, 2.4) * 3.0;
+  const bob = Math.sin(t * 2.4) * 3.0 * (.5 + energy * .8) + nod;
+  const lean = Math.sin(t * .72) * 3.4;
+  const tip = Math.sin(t * .95) * 1.5;                       // slight rotateX
+
+  setPart(EL.body, `girl${idxOf(g.which)}.png`, fx, fy, fw, fh,
+    fw / 2, fh,                                              // pivot = the feet
+    `translateY(${n2(bob)}px) rotateX(${n2(tip)}deg) rotateY(${n2(lean)}deg) `
+    + `rotateZ(${n2(sway)}deg) scale(${n2(.82 + .18 * pop)})`,
+    vis);
+
+  /* the head node is no longer used — keep it dark so no seam can show */
+  EL.head.style.opacity = '0';
+
+  /* a procedural contact shadow: an ellipse on the ground, never a cut */
+  const ew = fw * .52, eh = fw * .12;
+  EL.shadow.style.backgroundImage = 'none';
+  EL.shadow.style.backgroundColor = rgba(C.ink, .30);
+  EL.shadow.style.borderRadius = '50%';
+  EL.shadow.style.left = n2(fx + fw / 2 - ew / 2) + 'px';
+  EL.shadow.style.top = n2(fy + fh - eh * .55) + 'px';
+  EL.shadow.style.width = n2(ew) + 'px';
+  EL.shadow.style.height = n2(eh) + 'px';
+  EL.shadow.style.transformOrigin = '50% 50%';
+  EL.shadow.style.transform =
+    `scale(${n2((.82 + .18 * pop) * (1 - Math.abs(bob) / 300))})`;
+  EL.shadow.style.opacity = (vis * .55).toFixed(3);
 }
 
 function setPart(el, file, x, y, w, h, px, py, tf, op) {
